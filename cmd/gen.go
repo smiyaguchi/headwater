@@ -1,10 +1,9 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 
+	"github.com/smiyaguchi/headwater/generator"
 	"github.com/smiyaguchi/headwater/schema"
 	"github.com/spf13/cobra"
 )
@@ -17,18 +16,16 @@ var genCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		schemaFile, _ = cmd.PersistentFlags().GetString("schema")
 
-		fmt.Println(schemaFile)
-		bytes, err := ioutil.ReadFile(schemaFile)
+		var s schema.Schema
+		s, err := schema.ReadFile(schemaFile)
 		if err != nil {
-			panic(err)
+			fmt.Println(err)
+			return
 		}
 
-		var schema []schema.Schema
-		if err := json.Unmarshal(bytes, &schema); err != nil {
-			panic(err)
-		}
-		fmt.Println(schema)
+		generator.Generate(s)
 	},
+	
 }
 
 func init() {
