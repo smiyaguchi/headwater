@@ -8,7 +8,7 @@ json=$(cat << EOS
     "column":"column1",
     "type":"STRING",
     "unique":"true",
-    "nullable":"false"
+    "mode":"NULLABLE"
   },
   {
     "column":"column2",
@@ -16,7 +16,7 @@ json=$(cat << EOS
     "precision":"3",
     "scale":"1",
     "unique":"false",
-    "nullable":"false"
+    "mode":"NULLABLE"
   },
   {
     "column":"column3",
@@ -24,7 +24,7 @@ json=$(cat << EOS
     "precision":"3",
     "scale":"1",
     "unique":"false",
-    "nullable":"false"
+    "mode":"NULLABLE"
   },
   {
     "column":"column4",
@@ -32,7 +32,7 @@ json=$(cat << EOS
     "precision":"3",
     "scale":"1",
     "unique":"false",
-    "nullable":"false"
+    "mode":"NULLABLE"
   },
   {
     "column":"column5",
@@ -40,7 +40,7 @@ json=$(cat << EOS
     "precision":"3",
     "scale":"1",
     "unique":"false",
-    "nullable":"false"
+    "mode":"NULLABLE"
   },
   {
     "column":"column6",
@@ -48,7 +48,7 @@ json=$(cat << EOS
     "precision":"3",
     "scale":"1",
     "unique":"false",
-    "nullable":"false"
+    "mode":"NULLABLE"
   },
   {
     "column":"column7",
@@ -56,7 +56,7 @@ json=$(cat << EOS
     "precision":"3",
     "scale":"1",
     "unique":"false",
-    "nullable":"false"
+    "mode":"NULLABLE"
   },
   {
     "column":"column8",
@@ -64,7 +64,7 @@ json=$(cat << EOS
     "precision":"3",
     "scale":"1",
     "unique":"false",
-    "nullable":"false"
+    "mode":"NULLABLE"
   },
   {
     "column":"column9",
@@ -72,7 +72,7 @@ json=$(cat << EOS
     "precision":"3",
     "scale":"1",
     "unique":"false",
-    "nullable":"false"
+    "mode":"NULLABLE"
   },
   {
     "column":"column10",
@@ -80,7 +80,7 @@ json=$(cat << EOS
     "precision":"3",
     "scale":"1",
     "unique":"false",
-    "nullable":"false"
+    "mode":"NULLABLE"
   },
   {
     "column":"column11",
@@ -88,7 +88,7 @@ json=$(cat << EOS
     "precision":"3",
     "scale":"1",
     "unique":"false",
-    "nullable":"false"
+    "mode":"NULLABLE"
   }
 ]
 EOS

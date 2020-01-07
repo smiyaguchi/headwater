@@ -45,6 +45,10 @@ func validate(columns []Column) error {
 		return err
 	}
 
+	if err := validateMode(columns); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -63,10 +67,24 @@ func validateType(columns []Column) error {
 			t == "DATETIME" ||
 			t == "GEOGRAPHY" ||
 			t == "RECORD" {
-
-				return nil
+			
+			continue
 		}
 		return errors.New(fmt.Sprintf("Not support type %s", v.Type))	
+	}
+	return nil
+}
+
+func validateMode(columns []Column) error {
+	for _, v := range columns {
+		m := strings.ToUpper(v.Mode)
+		if m == "NULLABLE" ||
+			m == "REQUIRED" ||
+			m == "REPEATED" {
+			
+			continue
+		}
+		return errors.New(fmt.Sprintf("Not support mode %s", v.Mode))
 	}
 	return nil
 }
