@@ -9,12 +9,14 @@ import (
 )
 
 var schemaFile string
+var count int
 var genCmd = &cobra.Command{
 	Use:   "gen",
 	Short: "Generate test date",
 	Long:  "Generate test date for big data",
 	Run: func(cmd *cobra.Command, args []string) {
 		schemaFile, _ = cmd.PersistentFlags().GetString("schema")
+		count, _ = cmd.PersistentFlags().GetInt("count")
 
 		var s schema.Schema
 		s, err := schema.ReadFile(schemaFile)
@@ -23,14 +25,14 @@ var genCmd = &cobra.Command{
 			return
 		}
 
-		generator.Generate(s)
+		generator.Generate(s, count)
 	},
-	
 }
 
 func init() {
 	genCmd.PersistentFlags().StringP("schema", "s", "schema.json", "input schema file")
 	genCmd.PersistentFlags().StringP("output", "o", "testdata.csv", "output test data file")
+	genCmd.PersistentFlags().IntP("count", "c", 1000, "generate count")
 
 	rootCmd.AddCommand(genCmd)
 }

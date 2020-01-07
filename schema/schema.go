@@ -18,7 +18,7 @@ type Column struct {
 }
 
 type Schema struct {
-	columns []Column
+	Columns []Column
 }
 
 func ReadFile(path string) (Schema, error) {
@@ -36,7 +36,7 @@ func ReadFile(path string) (Schema, error) {
 		return Schema{}, err
 	}
 
-	var schema = Schema{columns: columns}
+	var schema = Schema{Columns: columns}
 	return schema, nil
 }
 
