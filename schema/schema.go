@@ -9,12 +9,12 @@ import (
 )
 
 type Column struct {
-	ColumnName string `json:"column"`
+	Name 	   string `json:"name"`
 	Type       string `json:"type"`
 	Precision  uint8  `json:"precision,string"`
 	Scale      uint8  `json:"scale,string"`
 	Unique     bool   `json:"unique,string"`
-	Nullable   bool   `json:"nullable,string"`
+	Mode       string `json:"mode"`
 }
 
 type Schema struct {
