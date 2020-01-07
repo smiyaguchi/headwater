@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"fmt"
 	"encoding/csv"
 	"math/rand"
 	"os"
@@ -12,12 +13,15 @@ import (
 	"github.com/brianvoe/gofakeit"
 )
 
+var keys = make(map[string]int)
+
 func Generate(schema schema.Schema, count int) {
 	data := make([][]string, count)	
 	gofakeit.Seed(time.Now().UnixNano())
 
 	for i := 0; i < count; i++ {
 		d := make([]string, len(schema.Columns))
+		key := ""
 		for j, v := range schema.Columns {
 			if !v.Unique && v.Mode == "NULLABLE" {
 				rand.Seed(time.Now().UnixNano())
@@ -28,7 +32,7 @@ func Generate(schema schema.Schema, count int) {
 
 			t := strings.ToUpper(v.Type)
 			if t == "STRING" {
-				d[j] = gofakeit.Sentence(1)
+				d[j] = gofakeit.Name() + "_" + gofakeit.City()
 			} else if t == "INTEGER" {
 				d[j] = strconv.FormatUint(gofakeit.Uint64(), 10)
 			} else if t == "NUMERIC" {
@@ -48,8 +52,16 @@ func Generate(schema schema.Schema, count int) {
 			} else if t == "DATETIME" {
 				d[j] = gofakeit.Date().Format("2006-01-02 15:04:05")
 			}
+			
+			if v.Unique {
+				key += d[j]
+			}
+		}
+		if _, exist := keys[key]; exist {
+			fmt.Printf("Exist key %v\n", key)
 		}
 		data[i] = d
+		keys[key] = 0
 	}
 	
 	w := csv.NewWriter(os.Stdout)
