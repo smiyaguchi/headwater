@@ -2,6 +2,7 @@ package generator
 
 import (
 	"encoding/csv"
+	"math/rand"
 	"os"
 	"strconv"
 	"strings"
@@ -18,6 +19,13 @@ func Generate(schema schema.Schema, count int) {
 	for i := 0; i < count; i++ {
 		d := make([]string, len(schema.Columns))
 		for j, v := range schema.Columns {
+			if !v.Unique && v.Mode == "NULLABLE" {
+				rand.Seed(time.Now().UnixNano())
+				if rand.Intn(10) > 8 {
+					continue
+				}				
+			}
+
 			t := strings.ToUpper(v.Type)
 			if t == "STRING" {
 				d[j] = gofakeit.Sentence(1)
