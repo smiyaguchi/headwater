@@ -1,7 +1,6 @@
 package generator
 
 import (
-	"fmt"
 	"encoding/csv"
 	"math/rand"
 	"os"
@@ -58,7 +57,8 @@ func Generate(schema schema.Schema, count int) {
 			}
 		}
 		if _, exist := keys[key]; exist {
-			fmt.Printf("Exist key %v\n", key)
+			i--
+			continue
 		}
 		data[i] = d
 		keys[key] = 0
