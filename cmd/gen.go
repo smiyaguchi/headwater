@@ -8,8 +8,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var schemaFile string
-var count int
+var (
+	schemaFile string
+	count int
+	loss bool
+)
+
 var genCmd = &cobra.Command{
 	Use:   "gen",
 	Short: "Generate test date",
@@ -17,6 +21,7 @@ var genCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		schemaFile, _ = cmd.PersistentFlags().GetString("schema")
 		count, _ = cmd.PersistentFlags().GetInt("count")
+		loss, _ = cmd.PersistentFlags().GetBool("loss")
 
 		var s schema.Schema
 		s, err := schema.ReadFile(schemaFile)
@@ -25,7 +30,7 @@ var genCmd = &cobra.Command{
 			return
 		}
 
-		generator.Generate(s, count)
+		generator.Generate(s, count, loss)
 	},
 }
 
@@ -33,6 +38,7 @@ func init() {
 	genCmd.PersistentFlags().StringP("schema", "s", "schema.json", "input schema file")
 	genCmd.PersistentFlags().StringP("output", "o", "testdata.csv", "output test data file")
 	genCmd.PersistentFlags().IntP("count", "c", 1000, "generate count")
+	genCmd.PersistentFlags().BoolP("loss", "l", false, "include null values in data")
 
 	rootCmd.AddCommand(genCmd)
 }

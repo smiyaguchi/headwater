@@ -10,11 +10,11 @@ import (
 
 var keys = make(map[string]int)
 
-func Generate(schema schema.Schema, count int) {
+func Generate(schema schema.Schema, count int, loss bool) {
 	data := make([][]string, count)
 
 	for i := 0; i < count; i++ {
-		d := faker.Fake(schema)
+		d := faker.Fake(schema, loss)
 
 		if _, exist := keys[d.Key]; exist {
 			i--

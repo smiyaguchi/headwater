@@ -18,20 +18,20 @@ type Data struct {
 	Key         string
 }
 
-func Fake(schema schema.Schema) Data {
+func Fake(schema schema.Schema, loss bool) Data {
 	cv := make(map[string]string)
 	rv := make([]string, len(schema.Columns))
 	key := ""
 	gofakeit.Seed(time.Now().UnixNano())
 
 	for i, c := range schema.Columns {
-		if !c.Unique && c.Mode == "NULLABLE" {
+		if loss && !c.Unique && c.Mode == "NULLABLE" {
 			rand.Seed(time.Now().UnixNano())
 			if rand.Intn(10) > 8 {
 				continue
 			}
 		}
-		
+
 		d := ""
 		t := strings.ToUpper(c.Type)
 		if t == "STRING" {
