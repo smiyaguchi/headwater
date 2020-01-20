@@ -15,7 +15,8 @@ type Column struct {
 }
 
 type Schema struct {
-	Columns []Column
+	Columns   []Column
+	HasUnique bool
 }
 
 func ReadFile(path string) (Schema, error) {
@@ -33,7 +34,7 @@ func ReadFile(path string) (Schema, error) {
 		return Schema{}, err
 	}
 
-	var schema = Schema{Columns: columns}
+	var schema = Schema{Columns: columns, HasUnique: hasUnique(columns)}
 	return schema, nil
 }
 
@@ -49,4 +50,13 @@ func validate(columns []Column) error {
 	}
 
 	return nil
+}
+
+func hasUnique(columns []Column) bool {
+	for _, c := range columns {
+		if c.Unique {
+			return true
+		}
+	}
+	return false
 }
