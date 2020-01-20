@@ -52,7 +52,7 @@ func Fake(schema schema.Schema, loss bool) Data {
 		} else if t == "BOOLEAN" {
 			d = strconv.FormatBool(gofakeit.Bool())
 		} else if t == "TIMESTAMP" {
-			d = gofakeit.Date().String()
+			d = gofakeit.Date().Format("2006-01-02 15:04:05.000000 MST")
 		} else if t == "DATE" {
 			d = gofakeit.Date().Format("2006-01-02")
 		} else if t == "TIME" {
