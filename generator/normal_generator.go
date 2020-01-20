@@ -14,10 +14,13 @@ func Generate(schema schema.Schema, count int, loss bool) {
 	for i := 0; i < count; i++ {
 		d := faker.Fake(schema, loss)
 
-		if _, exist := keys[d.Key]; exist {
-			i--
-			continue
+		if d.Key != "" {
+			if _, exist := keys[d.Key]; exist {
+				i--
+				continue
+			}
 		}
+
 		data[i] = d.RowValue
 		keys[d.Key] = 0
 	}
