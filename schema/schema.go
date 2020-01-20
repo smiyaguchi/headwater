@@ -2,19 +2,16 @@ package schema
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
 	"io/ioutil"
-	"strings"
 )
 
 type Column struct {
-	Name 	   string `json:"name"`
-	Type       string `json:"type"`
-	Precision  uint8  `json:"precision,string"`
-	Scale      uint8  `json:"scale,string"`
-	Unique     bool   `json:"unique,string"`
-	Mode       string `json:"mode"`
+	Name      string `json:"name"`
+	Type      string `json:"type"`
+	Precision uint8  `json:"precision,string"`
+	Scale     uint8  `json:"scale,string"`
+	Unique    bool   `json:"unique,string"`
+	Mode      string `json:"mode"`
 }
 
 type Schema struct {
@@ -41,50 +38,15 @@ func ReadFile(path string) (Schema, error) {
 }
 
 func validate(columns []Column) error {
-	if err := validateType(columns); err != nil {
+	v := new(Validator)
+
+	if err := v.Type(columns); err != nil {
 		return err
 	}
 
-	if err := validateMode(columns); err != nil {
+	if err := v.Mode(columns); err != nil {
 		return err
 	}
 
-	return nil
-}
-
-func validateType(columns []Column) error {
-	for _, v := range columns {
-		t := strings.ToUpper(v.Type)
-		if t == "STRING" ||
-			t == "BYTES" ||
-			t == "INTEGER" ||
-			t == "FLOAT" ||
-			t == "NUMERIC" ||
-			t == "BOOLEAN" ||
-			t == "TIMESTAMP" ||
-			t == "DATE" ||
-			t == "TIME" ||
-			t == "DATETIME" ||
-			t == "GEOGRAPHY" ||
-			t == "RECORD" {
-			
-			continue
-		}
-		return errors.New(fmt.Sprintf("Not support type %s", v.Type))	
-	}
-	return nil
-}
-
-func validateMode(columns []Column) error {
-	for _, v := range columns {
-		m := strings.ToUpper(v.Mode)
-		if m == "NULLABLE" ||
-			m == "REQUIRED" ||
-			m == "REPEATED" {
-			
-			continue
-		}
-		return errors.New(fmt.Sprintf("Not support mode %s", v.Mode))
-	}
 	return nil
 }
