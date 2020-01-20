@@ -17,16 +17,16 @@ type Data struct {
 	RowValue    []string
 	Key         string
 	From        string
-    To          string
+	To          string
 }
 
 func Fake(schema schema.Schema, loss bool) Data {
 	var data = Data{
 		ColumnValue: make(map[string]string),
-		RowValue: make([]string, len(schema.Columns)),
-		Key: "",
-		From: "",	
-		To: "",
+		RowValue:    make([]string, len(schema.Columns)),
+		Key:         "",
+		From:        "",
+		To:          "",
 	}
 
 	gofakeit.Seed(time.Now().UnixNano())
@@ -71,7 +71,7 @@ func Fake(schema schema.Schema, loss bool) Data {
 		if c.From {
 			data.From = d
 		}
-		
+
 		if c.To {
 			data.To = d
 		}
