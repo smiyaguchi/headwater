@@ -35,7 +35,7 @@ func Fake(schema schema.Schema) Data {
 		d := ""
 		t := strings.ToUpper(c.Type)
 		if t == "STRING" {
-			d = gofakeit.Name() + "_" + gofakeit.City()
+			d = gofakeit.LastName() + "_" + gofakeit.FirstName()
 		} else if t == "INTEGER" {
 			d = strconv.FormatUint(gofakeit.Uint64(), 10)
 		} else if t == "NUMERIC" {
