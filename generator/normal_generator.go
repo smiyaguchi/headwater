@@ -1,10 +1,8 @@
 package generator
 
 import (
-	"encoding/csv"
-	"os"
-
 	"github.com/smiyaguchi/headwater/generator/faker"
+	"github.com/smiyaguchi/headwater/generator/writer"
 	"github.com/smiyaguchi/headwater/schema"
 )
 
@@ -24,10 +22,7 @@ func Generate(schema schema.Schema, count int, loss bool) {
 		keys[d.Key] = 0
 	}
 
-	w := csv.NewWriter(os.Stdout)
-	w.WriteAll(data)
-
-	if err := w.Error(); err != nil {
+	if err := writer.Write(data); err != nil {
 		panic(err)
 	}
 }
