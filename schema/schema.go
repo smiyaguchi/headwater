@@ -12,6 +12,8 @@ type Column struct {
 	Scale     uint8  `json:"scale,string"`
 	Unique    bool   `json:"unique,string"`
 	Mode      string `json:"mode"`
+	From      bool   `json:"from,string"`
+    To        bool   `json:"to,string"`
 }
 
 type Schema struct {

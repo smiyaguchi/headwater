@@ -3,7 +3,6 @@ package generator
 import (
 	"encoding/csv"
 	"os"
-	"time"
 
 	"github.com/smiyaguchi/headwater/generator/faker"
 	"github.com/smiyaguchi/headwater/schema"

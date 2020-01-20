@@ -88,7 +88,17 @@ json=$(cat << EOS
     "precision":"3",
     "scale":"1",
     "unique":"false",
-    "mode":"NULLABLE"
+    "mode":"NULLABLE",
+	"from":"true"
+  },
+  {
+    "column":"column11",
+    "type":"DATETIME",
+    "precision":"3",
+    "scale":"1",
+    "unique":"false",
+    "mode":"NULLABLE",
+	"to":"true"
   }
 ]
 EOS
