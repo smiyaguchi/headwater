@@ -16,12 +16,19 @@ type Data struct {
 	ColumnValue map[string]string
 	RowValue    []string
 	Key         string
+	From        string
+    To          string
 }
 
 func Fake(schema schema.Schema, loss bool) Data {
-	cv := make(map[string]string)
-	rv := make([]string, len(schema.Columns))
-	key := ""
+	var data = Data{
+		ColumnValue: make(map[string]string),
+		RowValue: make([]string, len(schema.Columns)),
+		Key: "",
+		From: "",	
+		To: "",
+	}
+
 	gofakeit.Seed(time.Now().UnixNano())
 
 	for i, c := range schema.Columns {
@@ -54,13 +61,21 @@ func Fake(schema schema.Schema, loss bool) Data {
 			d = gofakeit.Date().Format("2006-01-02 15:04:05")
 		}
 
-		cv[c.Name] = d
-		rv[i] += d
+		data.ColumnValue[c.Name] = d
+		data.RowValue[i] = d
 
 		if c.Unique {
-			key += d
+			data.Key += d
+		}
+
+		if c.From {
+			data.From = d
+		}
+		
+		if c.To {
+			data.To = d
 		}
 	}
 
-	return Data{ColumnValue: cv, RowValue: rv, Key: key}
+	return data
 }
