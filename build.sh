@@ -92,7 +92,7 @@ json=$(cat << EOS
 	"from":"true"
   },
   {
-    "name":"column11",
+    "name":"column12",
     "type":"DATETIME",
     "precision":"3",
     "scale":"1",

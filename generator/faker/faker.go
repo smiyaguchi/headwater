@@ -46,9 +46,9 @@ func Fake(schema schema.Schema, loss bool) Data {
 			case "STRING":
 				d = gofakeit.LastName() + "_" + gofakeit.FirstName()
 			case "INTEGER":
-			    d = strconv.FormatUint(gofakeit.Uint64(), 10)
+			    d = strconv.Itoa(rand.Intn(1000))
 			case "NUMERIC":
-				d = strconv.FormatInt(gofakeit.Int64(), 10)
+				d = strconv.Itoa(rand.Intn(1000))
 			case "FLOAT":
 				d = strconv.FormatFloat(gofakeit.Float64(), 'e', 9, 64)
 			case "BOOLEAN":
