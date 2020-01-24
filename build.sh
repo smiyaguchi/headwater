@@ -5,13 +5,13 @@ go build -o hw
 json=$(cat << EOS
 [
   {
-    "column":"column1",
+    "name":"column1",
     "type":"STRING",
     "unique":"true",
     "mode":"NULLABLE"
   },
   {
-    "column":"column2",
+    "name":"column2",
     "type":"INTEGER",
     "precision":"3",
     "scale":"1",
@@ -19,7 +19,7 @@ json=$(cat << EOS
     "mode":"NULLABLE"
   },
   {
-    "column":"column3",
+    "name":"column3",
     "type":"FLOAT",
     "precision":"3",
     "scale":"1",
@@ -27,7 +27,7 @@ json=$(cat << EOS
     "mode":"NULLABLE"
   },
   {
-    "column":"column4",
+    "name":"column4",
     "type":"NUMERIC",
     "precision":"3",
     "scale":"1",
@@ -35,7 +35,7 @@ json=$(cat << EOS
     "mode":"NULLABLE"
   },
   {
-    "column":"column5",
+    "name":"column5",
     "type":"BOOLEAN",
     "precision":"3",
     "scale":"1",
@@ -43,7 +43,7 @@ json=$(cat << EOS
     "mode":"NULLABLE"
   },
   {
-    "column":"column6",
+    "name":"column6",
     "type":"TIMESTAMP",
     "precision":"3",
     "scale":"1",
@@ -51,7 +51,7 @@ json=$(cat << EOS
     "mode":"NULLABLE"
   },
   {
-    "column":"column7",
+    "name":"column7",
     "type":"TIMESTAMP",
     "precision":"3",
     "scale":"1",
@@ -59,7 +59,7 @@ json=$(cat << EOS
     "mode":"NULLABLE"
   },
   {
-    "column":"column8",
+    "name":"column8",
     "type":"DATE",
     "precision":"3",
     "scale":"1",
@@ -67,7 +67,7 @@ json=$(cat << EOS
     "mode":"NULLABLE"
   },
   {
-    "column":"column9",
+    "name":"column9",
     "type":"TIME",
     "precision":"3",
     "scale":"1",
@@ -75,7 +75,7 @@ json=$(cat << EOS
     "mode":"NULLABLE"
   },
   {
-    "column":"column10",
+    "name":"column10",
     "type":"TIME",
     "precision":"3",
     "scale":"1",
@@ -83,7 +83,7 @@ json=$(cat << EOS
     "mode":"NULLABLE"
   },
   {
-    "column":"column11",
+    "name":"column11",
     "type":"DATETIME",
     "precision":"3",
     "scale":"1",
@@ -92,7 +92,7 @@ json=$(cat << EOS
 	"from":"true"
   },
   {
-    "column":"column11",
+    "name":"column11",
     "type":"DATETIME",
     "precision":"3",
     "scale":"1",

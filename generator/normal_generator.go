@@ -8,10 +8,18 @@ import (
 
 var keys = make(map[string]int)
 
-func Generate(schema schema.Schema, count int, loss bool) {
+func Generate(schema schema.Schema, count int, loss bool, header bool) {
+	if header {
+		count += 1
+	}
 	data := make([][]string, count)
 
 	for i := 0; i < count; i++ {
+		if header && i == 0 {
+			data[i] = schema.Names()
+			continue
+		}
+
 		d := faker.Fake(schema, loss)
 
 		if d.Key != "" {

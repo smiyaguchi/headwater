@@ -1,0 +1,26 @@
+[
+  {
+    "name":"column1",
+    "type":"STRING",
+    "unique":"true",
+    "mode":"NULLABLE"
+  },
+  {
+    "name":"column11",
+    "type":"DATETIME",
+    "precision":"3",
+    "scale":"1",
+    "unique":"false",
+    "mode":"NULLABLE",
+	"from":"true"
+  },
+  {
+    "name":"column11",
+    "type":"DATETIME",
+    "precision":"3",
+    "scale":"1",
+    "unique":"false",
+    "mode":"NULLABLE",
+	"to":"true"
+  }
+]

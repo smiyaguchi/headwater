@@ -25,16 +25,28 @@ type Schema struct {
 
 func (s *Schema) InfoFrom() (int, string) {
 	for i, c := range s.Columns {
-		if c.From { return i, c.Name }
+		if c.From {
+			return i, c.Name
+		}
 	}
 	return -1, ""
 }
 
 func (s *Schema) InfoTo() (int, string) {
 	for i, c := range s.Columns {
-		if c.To { return i, c.Name }
+		if c.To {
+			return i, c.Name
+		}
 	}
 	return -1, ""
+}
+
+func (s *Schema) Names() []string {
+	names := make([]string, len(s.Columns))
+	for i, c := range s.Columns {
+		names[i] = c.Name
+	}
+	return names
 }
 
 func ReadFile(path string) (Schema, error) {

@@ -9,7 +9,11 @@ import (
 	"github.com/smiyaguchi/headwater/schema"
 )
 
-func GenerateHistory(schema schema.Schema, count int, loss bool) {
+func GenerateHistory(schema schema.Schema, count int, loss bool, header bool) {
+	if header {
+		count += 1
+	}
+
 	data := make([][]string, count)
 
 	if !schema.HasFrom || !schema.HasTo {
@@ -17,6 +21,11 @@ func GenerateHistory(schema schema.Schema, count int, loss bool) {
 	}
 
 	for i := 0; i < count; i++ {
+		if header && i == 0 {
+			data[i] = schema.Names()
+			continue
+		}
+
 		d := faker.Fake(schema, loss)
 
 		historyData := generateHistory(schema, count-i, d.RowValue)
