@@ -41,24 +41,28 @@ func Fake(schema schema.Schema, loss bool) Data {
 
 		d := ""
 		t := strings.ToUpper(c.Type)
-		if t == "STRING" {
-			d = gofakeit.LastName() + "_" + gofakeit.FirstName()
-		} else if t == "INTEGER" {
-			d = strconv.FormatUint(gofakeit.Uint64(), 10)
-		} else if t == "NUMERIC" {
-			d = strconv.FormatInt(gofakeit.Int64(), 10)
-		} else if t == "FLOAT" {
-			d = strconv.FormatFloat(gofakeit.Float64(), 'e', 9, 64)
-		} else if t == "BOOLEAN" {
-			d = strconv.FormatBool(gofakeit.Bool())
-		} else if t == "TIMESTAMP" {
-			d = gofakeit.DateRange(time.Unix(0, 484633944473634951), time.Now()).Format("2006-01-02 15:04:05.000000 MST")
-		} else if t == "DATE" {
-			d = gofakeit.DateRange(time.Unix(0, 484633944473634951), time.Now()).Format("2006-01-02")
-		} else if t == "TIME" {
-			d = gofakeit.DateRange(time.Unix(0, 484633944473634951), time.Now()).Format("15:04:05")
-		} else if t == "DATETIME" {
-			d = gofakeit.DateRange(time.Unix(0, 484633944473634951), time.Now()).Format("2006-01-02 15:04:05")
+
+		switch t {
+			case "STRING":
+				d = gofakeit.LastName() + "_" + gofakeit.FirstName()
+			case "INTEGER":
+			    d = strconv.FormatUint(gofakeit.Uint64(), 10)
+			case "NUMERIC":
+				d = strconv.FormatInt(gofakeit.Int64(), 10)
+			case "FLOAT":
+				d = strconv.FormatFloat(gofakeit.Float64(), 'e', 9, 64)
+			case "BOOLEAN":
+				d = strconv.FormatBool(gofakeit.Bool())
+			case "TIMESTAMP":
+				d = gofakeit.DateRange(time.Unix(0, 484633944473634951), time.Now()).Format("2006-01-02 15:04:05.000000 MST")
+			case "DATE":
+				d = gofakeit.DateRange(time.Unix(0, 484633944473634951), time.Now()).Format("2006-01-02")
+			case "TIME":
+				d = gofakeit.DateRange(time.Unix(0, 484633944473634951), time.Now()).Format("15:04:05")
+			case "DATETIME":
+				d = gofakeit.DateRange(time.Unix(0, 484633944473634951), time.Now()).Format("2006-01-02 15:04:05")
+			default:
+				panic("Not support type")
 		}
 
 		data.ColumnValue[c.Name] = d
