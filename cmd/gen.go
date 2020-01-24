@@ -42,7 +42,6 @@ var genCmd = &cobra.Command{
 
 func init() {
 	genCmd.PersistentFlags().StringP("schema", "s", "schema.json", "input schema file")
-	genCmd.PersistentFlags().StringP("output", "o", "testdata.csv", "output test data file")
 	genCmd.PersistentFlags().IntP("count", "c", 1000, "generate count")
 	genCmd.PersistentFlags().BoolP("loss", "l", false, "include null values in data")
 	genCmd.PersistentFlags().StringP("mode", "m", "NORMAL", "generate mode")
