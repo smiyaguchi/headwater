@@ -51,3 +51,14 @@ func (v *Validator) Mode(columns []Column) error {
 
 	return nil
 }
+
+func (v *Validator) FromTo(columns []Column) error {
+	for _, c := range columns {
+		if c.From || c.To {
+			if c.Type != "DATE" && c.Type != "DATETIME" && c.Type != "TIMESTAMP" {
+				return errors.New(fmt.Sprintf("From and To field is support type DATE DATETIME TIMESTAMP"))
+			}
+		}
+	}
+	return nil
+}

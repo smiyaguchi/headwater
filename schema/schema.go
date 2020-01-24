@@ -85,6 +85,10 @@ func validate(columns []Column) error {
 		return err
 	}
 
+	if err := v.FromTo(columns); err != nil {
+		return err
+	}
+
 	return nil
 }
 
