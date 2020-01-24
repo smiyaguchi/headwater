@@ -52,13 +52,13 @@ func Fake(schema schema.Schema, loss bool) Data {
 		} else if t == "BOOLEAN" {
 			d = strconv.FormatBool(gofakeit.Bool())
 		} else if t == "TIMESTAMP" {
-			d = gofakeit.Date().Format("2006-01-02 15:04:05.000000 MST")
+			d = gofakeit.DateRange(time.Unix(0, 484633944473634951), time.Now()).Format("2006-01-02 15:04:05.000000 MST")
 		} else if t == "DATE" {
-			d = gofakeit.Date().Format("2006-01-02")
+			d = gofakeit.DateRange(time.Unix(0, 484633944473634951), time.Now()).Format("2006-01-02")
 		} else if t == "TIME" {
-			d = gofakeit.Date().Format("15:04:05")
+			d = gofakeit.DateRange(time.Unix(0, 484633944473634951), time.Now()).Format("15:04:05")
 		} else if t == "DATETIME" {
-			d = gofakeit.Date().Format("2006-01-02 15:04:05")
+			d = gofakeit.DateRange(time.Unix(0, 484633944473634951), time.Now()).Format("2006-01-02 15:04:05")
 		}
 
 		data.ColumnValue[c.Name] = d

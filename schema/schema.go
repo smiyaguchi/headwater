@@ -13,12 +13,28 @@ type Column struct {
 	Unique    bool   `json:"unique,string"`
 	Mode      string `json:"mode"`
 	From      bool   `json:"from,string"`
-    To        bool   `json:"to,string"`
+	To        bool   `json:"to,string"`
 }
 
 type Schema struct {
 	Columns   []Column
 	HasUnique bool
+	HasFrom   bool
+	HasTo     bool
+}
+
+func (s *Schema) InfoFrom() (int, string) {
+	for i, c := range s.Columns {
+		if c.From { return i, c.Name }
+	}
+	return -1, ""
+}
+
+func (s *Schema) InfoTo() (int, string) {
+	for i, c := range s.Columns {
+		if c.To { return i, c.Name }
+	}
+	return -1, ""
 }
 
 func ReadFile(path string) (Schema, error) {
@@ -36,7 +52,13 @@ func ReadFile(path string) (Schema, error) {
 		return Schema{}, err
 	}
 
-	var schema = Schema{Columns: columns, HasUnique: hasUnique(columns)}
+	var schema = Schema{
+		Columns:   columns,
+		HasUnique: hasUnique(columns),
+		HasFrom:   hasFrom(columns),
+		HasTo:     hasTo(columns),
+	}
+
 	return schema, nil
 }
 
@@ -57,6 +79,24 @@ func validate(columns []Column) error {
 func hasUnique(columns []Column) bool {
 	for _, c := range columns {
 		if c.Unique {
+			return true
+		}
+	}
+	return false
+}
+
+func hasFrom(columns []Column) bool {
+	for _, c := range columns {
+		if c.From {
+			return true
+		}
+	}
+	return false
+}
+
+func hasTo(columns []Column) bool {
+	for _, c := range columns {
+		if c.To {
 			return true
 		}
 	}

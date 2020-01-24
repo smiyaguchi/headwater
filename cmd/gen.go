@@ -12,6 +12,7 @@ var (
 	schemaFile string
 	count int
 	loss bool
+	mode string
 )
 
 var genCmd = &cobra.Command{
@@ -22,6 +23,7 @@ var genCmd = &cobra.Command{
 		schemaFile, _ = cmd.PersistentFlags().GetString("schema")
 		count, _ = cmd.PersistentFlags().GetInt("count")
 		loss, _ = cmd.PersistentFlags().GetBool("loss")
+		mode, _ = cmd.PersistentFlags().GetString("mode")
 
 		var s schema.Schema
 		s, err := schema.ReadFile(schemaFile)
@@ -30,7 +32,11 @@ var genCmd = &cobra.Command{
 			return
 		}
 
-		generator.Generate(s, count, loss)
+		if mode == "HISTORY" {
+			generator.GenerateHistory(s, count, loss)
+		} else {
+			generator.Generate(s, count, loss)
+		}
 	},
 }
 
@@ -39,6 +45,7 @@ func init() {
 	genCmd.PersistentFlags().StringP("output", "o", "testdata.csv", "output test data file")
 	genCmd.PersistentFlags().IntP("count", "c", 1000, "generate count")
 	genCmd.PersistentFlags().BoolP("loss", "l", false, "include null values in data")
+	genCmd.PersistentFlags().StringP("mode", "m", "NORMAL", "generate mode")
 
 	rootCmd.AddCommand(genCmd)
 }
