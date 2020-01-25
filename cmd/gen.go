@@ -27,7 +27,6 @@ var genCmd = &cobra.Command{
 		mode, _ = cmd.PersistentFlags().GetString("mode")
 		header, _ = cmd.PersistentFlags().GetBool("header")
 
-		var s schema.Schema
 		s, err := schema.ReadFile(schemaFile)
 		if err != nil {
 			fmt.Println(err)

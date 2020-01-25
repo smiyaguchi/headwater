@@ -64,7 +64,7 @@ func ReadFile(path string) (Schema, error) {
 		return Schema{}, err
 	}
 
-	var schema = Schema{
+	schema := Schema{
 		Columns:   columns,
 		HasUnique: hasUnique(columns),
 		HasFrom:   hasFrom(columns),
