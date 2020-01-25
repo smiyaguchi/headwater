@@ -21,12 +21,6 @@ var genCmd = &cobra.Command{
 	Short: "Generate test date",
 	Long:  "Generate test date for big data",
 	Run: func(cmd *cobra.Command, args []string) {
-		schemaFile, _ = cmd.PersistentFlags().GetString("schema")
-		count, _ = cmd.PersistentFlags().GetInt("count")
-		loss, _ = cmd.PersistentFlags().GetBool("loss")
-		mode, _ = cmd.PersistentFlags().GetString("mode")
-		header, _ = cmd.PersistentFlags().GetBool("header")
-
 		s, err := schema.ReadFile(schemaFile)
 		if err != nil {
 			fmt.Println(err)
@@ -39,11 +33,11 @@ var genCmd = &cobra.Command{
 }
 
 func init() {
-	genCmd.PersistentFlags().StringP("schema", "s", "schema.json", "input schema file")
-	genCmd.PersistentFlags().IntP("count", "c", 1000, "generate count")
-	genCmd.PersistentFlags().BoolP("loss", "l", false, "include null values in data")
-	genCmd.PersistentFlags().StringP("mode", "m", "NORMAL", "generate mode")
-	genCmd.PersistentFlags().BoolP("header", "", true, "header flag")
+	genCmd.PersistentFlags().StringVarP(&schemaFile, "schema", "s", "schema.json", "input schema file")
+	genCmd.PersistentFlags().IntVarP(&count, "count", "c", 1000, "generate count")
+	genCmd.PersistentFlags().BoolVarP(&loss, "loss", "l", false, "include null values in data")
+	genCmd.PersistentFlags().StringVarP(&mode, "mode", "m", "NORMAL", "generate mode")
+	genCmd.PersistentFlags().BoolVarP(&header, "header", "", true, "header flag")
 
 	rootCmd.AddCommand(genCmd)
 }
