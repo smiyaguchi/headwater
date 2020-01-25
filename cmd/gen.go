@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/smiyaguchi/headwater/config"
 	"github.com/smiyaguchi/headwater/generator"
 	"github.com/smiyaguchi/headwater/schema"
 	"github.com/spf13/cobra"
@@ -27,8 +28,10 @@ var genCmd = &cobra.Command{
 			return
 		}
 
+		c := config.New(count, loss, header)
+
 		g := generator.New(mode)
-		g.Generate(s, count, loss, header)
+		g.Generate(s, c)
 	},
 }
 

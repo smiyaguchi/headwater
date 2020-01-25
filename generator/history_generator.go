@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/smiyaguchi/headwater/config"
 	"github.com/smiyaguchi/headwater/generator/faker"
 	"github.com/smiyaguchi/headwater/generator/writer"
 	"github.com/smiyaguchi/headwater/schema"
@@ -11,26 +12,22 @@ import (
 
 type HistoryGenerator struct{}
 
-func (hg *HistoryGenerator) Generate(schema schema.Schema, count int, loss bool, header bool) {
-	if header {
-		count += 1
-	}
-
-	data := make([][]string, count)
+func (hg *HistoryGenerator) Generate(schema schema.Schema, config config.Config) {
+	data := make([][]string, config.Count)
 
 	if !schema.HasFrom || !schema.HasTo {
 		panic("From and To field is required")
 	}
 
-	for i := 0; i < count; i++ {
-		if header && i == 0 {
+	for i := 0; i < config.Count; i++ {
+		if config.Header && i == 0 {
 			data[i] = schema.Names()
 			continue
 		}
 
-		d := faker.Fake(schema, loss)
+		d := faker.Fake(schema, config.Loss)
 
-		historyData := generateHistory(schema, count-i, d.RowValue)
+		historyData := generateHistory(schema, config.Count-i, d.RowValue)
 
 		for j := 0; j < len(historyData); j++ {
 			data[i] = historyData[j]

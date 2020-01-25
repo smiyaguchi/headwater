@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"github.com/smiyaguchi/headwater/config"
 	"github.com/smiyaguchi/headwater/generator/faker"
 	"github.com/smiyaguchi/headwater/generator/writer"
 	"github.com/smiyaguchi/headwater/schema"
@@ -10,19 +11,16 @@ type NormalGenerator struct{}
 
 var keys = make(map[string]int)
 
-func (ng *NormalGenerator) Generate(schema schema.Schema, count int, loss bool, header bool) {
-	if header {
-		count += 1
-	}
-	data := make([][]string, count)
+func (ng *NormalGenerator) Generate(schema schema.Schema, config config.Config) {
+	data := make([][]string, config.Count)
 
-	for i := 0; i < count; i++ {
-		if header && i == 0 {
+	for i := 0; i < config.Count; i++ {
+		if config.Header && i == 0 {
 			data[i] = schema.Names()
 			continue
 		}
 
-		d := faker.Fake(schema, loss)
+		d := faker.Fake(schema, config.Loss)
 
 		if d.Key != "" {
 			if _, exist := keys[d.Key]; exist {

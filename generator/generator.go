@@ -3,11 +3,12 @@ package generator
 import (
 	"strings"
 
+	"github.com/smiyaguchi/headwater/config"
 	"github.com/smiyaguchi/headwater/schema"
 )
 
 type Generator interface {
-	Generate(schema schema.Schema, count int, loss bool, header bool)
+	Generate(schema schema.Schema, config config.Config)
 }
 
 func New(mode string) Generator {
