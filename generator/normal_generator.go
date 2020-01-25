@@ -6,9 +6,11 @@ import (
 	"github.com/smiyaguchi/headwater/schema"
 )
 
+type NormalGenerator struct{}
+
 var keys = make(map[string]int)
 
-func Generate(schema schema.Schema, count int, loss bool, header bool) {
+func (ng *NormalGenerator) Generate(schema schema.Schema, count int, loss bool, header bool) {
 	if header {
 		count += 1
 	}

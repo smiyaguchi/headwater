@@ -34,11 +34,8 @@ var genCmd = &cobra.Command{
 			return
 		}
 
-		if mode == "HISTORY" {
-			generator.GenerateHistory(s, count, loss, header)
-		} else {
-			generator.Generate(s, count, loss, header)
-		}
+		g := generator.New(mode)
+		g.Generate(s, count, loss, header)
 	},
 }
 

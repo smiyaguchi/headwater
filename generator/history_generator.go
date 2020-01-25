@@ -9,7 +9,9 @@ import (
 	"github.com/smiyaguchi/headwater/schema"
 )
 
-func GenerateHistory(schema schema.Schema, count int, loss bool, header bool) {
+type HistoryGenerator struct{}
+
+func (hg *HistoryGenerator) Generate(schema schema.Schema, count int, loss bool, header bool) {
 	if header {
 		count += 1
 	}
