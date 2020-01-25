@@ -21,7 +21,7 @@ type Data struct {
 }
 
 func Fake(schema schema.Schema, loss bool) Data {
-	var data = Data{
+	data := Data{
 		ColumnValue: make(map[string]string),
 		RowValue:    make([]string, len(schema.Columns)),
 		Key:         "",
@@ -40,9 +40,8 @@ func Fake(schema schema.Schema, loss bool) Data {
 		}
 
 		d := ""
-		t := strings.ToUpper(c.Type)
 
-		switch t {
+		switch strings.ToUpper(c.Type) {
 		case "STRING":
 			d = gofakeit.LastName() + "_" + gofakeit.FirstName()
 		case "INTEGER", "NUMERIC":
