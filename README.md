@@ -1,5 +1,5 @@
 # headwater
-headwater is generate test data for big data
+`headwater` is generate test data for big data
 
 ## Building
 
@@ -12,7 +12,7 @@ make
 
 ## Usage
 ### Generate normal test data
-headwater uses json format schema file. Default schema filename is `schema.json`.<br>
+`headwater` uses json format schema file. Default schema filename is `schema.json`.<br>
 To change schema file, please use `-s` option.
 
 ```
