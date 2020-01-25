@@ -47,28 +47,18 @@ func (hg *HistoryGenerator) Generate(schema schema.Schema, config config.Config)
 }
 
 func (hg *HistoryGenerator) generateHistory(schema schema.Schema, countRange int, row []string) [][]string {
-	historyCount := hg.generateHistoryCount(countRange)
+	from := newDateInfo(schema, schema.IndexFrom(), row)
+	to := newDateInfo(schema, schema.IndexTo(), row)
 
+	var diffDays = int(time.Now().Sub(from.Time).Seconds()) / 60 / 60 / 24
+
+	historyCount := hg.generateHistoryCount(countRange)
 	data := make([][]string, historyCount)
 
-	indexFrom, _ := schema.InfoFrom()
-	indexTo, _ := schema.InfoTo()
-
-	typeFrom := hg.getType(schema, indexFrom)
-	typeTo := hg.getType(schema, indexTo)
-
-	formatFrom := hg.generateFormat(typeFrom)
-	formatTo := hg.generateFormat(typeTo)
-
-	lastdayTo := hg.generateLastDay(typeTo)
-
-	from, _ := time.Parse(formatFrom, row[indexFrom])
-	var diffDays = int(time.Now().Sub(from).Seconds()) / 60 / 60 / 24
-
 	if historyCount == 1 || diffDays <= 1 {
-		value := hg.copyRow(row)
-		value[indexTo] = lastdayTo
-		data[0] = value
+		cr := hg.copyRow(row)
+		cr[to.Index] = to.LastTime
+		data[0] = cr
 		return data
 	}
 
@@ -78,42 +68,54 @@ func (hg *HistoryGenerator) generateHistory(schema schema.Schema, countRange int
 
 	var span int = diffDays / historyCount
 
-	toDate := from
+	to.Time = from.Time
 	for i := 0; i < historyCount; i++ {
-		value := hg.copyRow(row)
+		cr := hg.copyRow(row)
 		if i == 0 {
-			toDate = toDate.Add(time.Hour * 24 * time.Duration(span))
-			toDate = time.Date(toDate.Year(), toDate.Month(), toDate.Day(), 0, 0, 0, 0, time.UTC)
-			value[indexTo] = toDate.Add(-1 * time.Nanosecond).Format(formatTo)
-			data[i] = value
+			to.Time = to.addTimeSpan(span)
+			to.Time = to.roundTimeZero(to.Time)
+			cr[to.Index] = to.Time.Add(-1 * time.Nanosecond).Format(to.Format)
+			data[i] = cr
 			continue
 		}
-		value[indexFrom] = toDate.Format(formatFrom)
-		toDate = toDate.Add(time.Hour * 24 * time.Duration(span))
+		cr[from.Index] = to.Time.Format(from.Format)
+		to.Time = to.addTimeSpan(span)
 
 		if i < (historyCount - 1) {
-			value[indexTo] = toDate.Add(-1 * time.Nanosecond).Format(formatTo)
+			cr[to.Index] = to.Time.Add(-1 * time.Nanosecond).Format(to.Format)
 		} else {
-			value[indexTo] = lastdayTo
+			cr[to.Index] = to.LastTime
 		}
-		data[i] = value
+		data[i] = cr
 	}
 
 	return data
 }
 
-func (hg *HistoryGenerator) generateHistoryCount(countRange int) int {
-	rand.Seed(time.Now().UnixNano())
-
-	historyCount := rand.Intn(6)
-	if countRange < 6 || historyCount == 0 {
-		historyCount = 1
-	}
-
-	return historyCount
+type dateInfo struct {
+	Index    int
+	Type     string
+	Format   string
+	LastTime string
+	Time     time.Time
 }
 
-func (hg *HistoryGenerator) generateFormat(typ string) string {
+func newDateInfo(schema schema.Schema, index int, row []string) dateInfo {
+	d := dateInfo{
+		Index: index,
+	}
+
+	d.Type = d.getType(schema, d.Index)
+	d.Format = d.generateFormat(d.Type)
+	d.LastTime = d.generateLastTime(d.Type)
+
+	t, _ := time.Parse(d.Format, row[d.Index])
+	d.Time = t
+
+	return d
+}
+
+func (di *dateInfo) generateFormat(typ string) string {
 	format := ""
 
 	switch strings.ToUpper(typ) {
@@ -130,25 +132,45 @@ func (hg *HistoryGenerator) generateFormat(typ string) string {
 	return format
 }
 
-func (hg *HistoryGenerator) generateLastDay(typ string) string {
-	day := ""
+func (di *dateInfo) generateLastTime(typ string) string {
+	t := ""
 
 	switch strings.ToUpper(typ) {
 	case "DATE":
-		day = "9999-12-31"
+		t = "9999-12-31"
 	case "DATETIME":
-		day = "9999-12-31 23:59:59"
+		t = "9999-12-31 23:59:59"
 	case "TIMESTAMP":
-		day = "9999-12-31 23:59:59.999999 UTC"
+		t = "9999-12-31 23:59:59.999999 UTC"
 	default:
-		day = ""
+		t = ""
 	}
 
-	return day
+	return t
 }
 
-func (hg *HistoryGenerator) getType(schema schema.Schema, index int) string {
+func (di *dateInfo) getType(schema schema.Schema, index int) string {
 	return schema.Columns[index].Type
+}
+
+func (di *dateInfo) addTimeSpan(span int) time.Time {
+	return di.Time.Add(time.Hour * 24 * time.Duration(span))
+}
+
+func (di *dateInfo) roundTimeZero(t time.Time) time.Time {
+	year, month, day := t.Date()
+	return time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
+}
+
+func (hg *HistoryGenerator) generateHistoryCount(countRange int) int {
+	rand.Seed(time.Now().UnixNano())
+
+	historyCount := rand.Intn(6)
+	if countRange < 6 || historyCount == 0 {
+		historyCount = 1
+	}
+
+	return historyCount
 }
 
 func (hg *HistoryGenerator) copyRow(row []string) []string {

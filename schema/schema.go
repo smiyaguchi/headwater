@@ -23,22 +23,22 @@ type Schema struct {
 	HasTo     bool
 }
 
-func (s *Schema) InfoFrom() (int, string) {
+func (s *Schema) IndexFrom() int {
 	for i, c := range s.Columns {
 		if c.From {
-			return i, c.Name
+			return i
 		}
 	}
-	return -1, ""
+	return -1
 }
 
-func (s *Schema) InfoTo() (int, string) {
+func (s *Schema) IndexTo() int {
 	for i, c := range s.Columns {
 		if c.To {
-			return i, c.Name
+			return i
 		}
 	}
-	return -1, ""
+	return -1
 }
 
 func (s *Schema) Names() []string {

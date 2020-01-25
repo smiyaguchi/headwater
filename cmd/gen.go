@@ -31,7 +31,7 @@ var genCmd = &cobra.Command{
 		c := config.New(count, loss, header)
 
 		g := generator.New(mode)
-		if err := g.Generate(s, c); err != nil {
+		if err = g.Generate(s, c); err != nil {
 			fmt.Println(err)
 			return
 		}
