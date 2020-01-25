@@ -8,7 +8,7 @@ import (
 )
 
 type Generator interface {
-	Generate(schema schema.Schema, config config.Config)
+	Generate(schema schema.Schema, config config.Config) error
 }
 
 func New(mode string) Generator {

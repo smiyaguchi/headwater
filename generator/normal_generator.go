@@ -11,7 +11,7 @@ type NormalGenerator struct{}
 
 var keys = make(map[string]int)
 
-func (ng *NormalGenerator) Generate(schema schema.Schema, config config.Config) {
+func (ng *NormalGenerator) Generate(schema schema.Schema, config config.Config) error {
 	data := make([][]string, config.Count)
 
 	for i := 0; i < config.Count; i++ {
@@ -34,6 +34,8 @@ func (ng *NormalGenerator) Generate(schema schema.Schema, config config.Config) 
 	}
 
 	if err := writer.Write(data); err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }

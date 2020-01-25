@@ -1,7 +1,9 @@
 package generator
 
 import (
+	"errors"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/smiyaguchi/headwater/config"
@@ -12,12 +14,12 @@ import (
 
 type HistoryGenerator struct{}
 
-func (hg *HistoryGenerator) Generate(schema schema.Schema, config config.Config) {
-	data := make([][]string, config.Count)
-
+func (hg *HistoryGenerator) Generate(schema schema.Schema, config config.Config) error {
 	if !schema.HasFrom || !schema.HasTo {
-		panic("From and To field is required")
+		return errors.New("From and To field is required")
 	}
+
+	data := make([][]string, config.Count)
 
 	for i := 0; i < config.Count; i++ {
 		if config.Header && i == 0 {
@@ -27,7 +29,7 @@ func (hg *HistoryGenerator) Generate(schema schema.Schema, config config.Config)
 
 		d := faker.Fake(schema, config.Loss)
 
-		historyData := generateHistory(schema, config.Count-i, d.RowValue)
+		historyData := hg.generateHistory(schema, config.Count-i, d.RowValue)
 
 		for j := 0; j < len(historyData); j++ {
 			data[i] = historyData[j]
@@ -38,31 +40,33 @@ func (hg *HistoryGenerator) Generate(schema schema.Schema, config config.Config)
 	}
 
 	if err := writer.Write(data); err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
-func generateHistory(schema schema.Schema, countRange int, row []string) [][]string {
-	historyCount := generateHistoryCount(countRange)
+func (hg *HistoryGenerator) generateHistory(schema schema.Schema, countRange int, row []string) [][]string {
+	historyCount := hg.generateHistoryCount(countRange)
 
 	data := make([][]string, historyCount)
 
 	indexFrom, _ := schema.InfoFrom()
 	indexTo, _ := schema.InfoTo()
 
-	typeFrom := getType(schema, indexFrom)
-	typeTo := getType(schema, indexTo)
+	typeFrom := hg.getType(schema, indexFrom)
+	typeTo := hg.getType(schema, indexTo)
 
-	formatFrom := generateFormat(typeFrom)
-	formatTo := generateFormat(typeTo)
+	formatFrom := hg.generateFormat(typeFrom)
+	formatTo := hg.generateFormat(typeTo)
 
-	lastdayTo := generateLastDay(typeTo)
+	lastdayTo := hg.generateLastDay(typeTo)
 
 	from, _ := time.Parse(formatFrom, row[indexFrom])
 	var diffDays = int(time.Now().Sub(from).Seconds()) / 60 / 60 / 24
 
-	if historyCount == 1 || diffDays == 1 || diffDays == 0 {
-		value := copyRow(row)
+	if historyCount == 1 || diffDays <= 1 {
+		value := hg.copyRow(row)
 		value[indexTo] = lastdayTo
 		data[0] = value
 		return data
@@ -76,7 +80,7 @@ func generateHistory(schema schema.Schema, countRange int, row []string) [][]str
 
 	toDate := from
 	for i := 0; i < historyCount; i++ {
-		value := copyRow(row)
+		value := hg.copyRow(row)
 		if i == 0 {
 			toDate = toDate.Add(time.Hour * 24 * time.Duration(span))
 			toDate = time.Date(toDate.Year(), toDate.Month(), toDate.Day(), 0, 0, 0, 0, time.UTC)
@@ -98,25 +102,21 @@ func generateHistory(schema schema.Schema, countRange int, row []string) [][]str
 	return data
 }
 
-func generateHistoryCount(countRange int) int {
+func (hg *HistoryGenerator) generateHistoryCount(countRange int) int {
 	rand.Seed(time.Now().UnixNano())
 
-	historyCount := 0
-	if countRange >= 6 {
-		historyCount = rand.Intn(6)
-	}
-
-	if historyCount == 0 {
+	historyCount := rand.Intn(6)
+	if countRange < 6 || historyCount == 0 {
 		historyCount = 1
 	}
 
 	return historyCount
 }
 
-func generateFormat(typ string) string {
+func (hg *HistoryGenerator) generateFormat(typ string) string {
 	format := ""
 
-	switch typ {
+	switch strings.ToUpper(typ) {
 	case "DATE":
 		format = "2006-01-02"
 	case "DATETIME":
@@ -130,10 +130,10 @@ func generateFormat(typ string) string {
 	return format
 }
 
-func generateLastDay(typ string) string {
+func (hg *HistoryGenerator) generateLastDay(typ string) string {
 	day := ""
 
-	switch typ {
+	switch strings.ToUpper(typ) {
 	case "DATE":
 		day = "9999-12-31"
 	case "DATETIME":
@@ -147,11 +147,11 @@ func generateLastDay(typ string) string {
 	return day
 }
 
-func getType(schema schema.Schema, index int) string {
+func (hg *HistoryGenerator) getType(schema schema.Schema, index int) string {
 	return schema.Columns[index].Type
 }
 
-func copyRow(row []string) []string {
+func (hg *HistoryGenerator) copyRow(row []string) []string {
 	copyRow := make([]string, len(row))
 	copy(copyRow, row)
 	return copyRow
