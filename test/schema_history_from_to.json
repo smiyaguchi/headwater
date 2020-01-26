@@ -1,0 +1,30 @@
+[
+  {
+    "name":"column1",
+    "type":"STRING",
+    "unique":"true",
+    "mode":"NULLABLE"
+  },
+  {
+    "name":"column2",
+    "type":"INTEGER",
+    "precision":"3",
+    "scale":"1",
+    "unique":"false",
+    "mode":"NULLABLE"
+  },
+  {
+    "name":"column3",
+    "type":"TIMESTAMP",
+    "unique":"false",
+    "mode":"NULLABLE",
+	"from":"true"
+  },
+  {
+    "name":"column3",
+    "type":"TIMESTAMP",
+    "unique":"false",
+    "mode":"NULLABLE",
+	"to":"true"
+  }
+]

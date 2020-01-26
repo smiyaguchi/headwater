@@ -12,15 +12,26 @@ type Column struct {
 	Scale     uint8  `json:"scale,string"`
 	Unique    bool   `json:"unique,string"`
 	Mode      string `json:"mode"`
+	History   bool   `json:"history,string"`
 	From      bool   `json:"from,string"`
 	To        bool   `json:"to,string"`
 }
 
 type Schema struct {
-	Columns   []Column
-	HasUnique bool
-	HasFrom   bool
-	HasTo     bool
+	Columns    []Column
+	HasUnique  bool
+	HasHistory bool
+	HasFrom    bool
+	HasTo      bool
+}
+
+func (s *Schema) IndexHistory() int {
+	for i, c := range s.Columns {
+		if c.History {
+			return i
+		}
+	}
+	return -1
 }
 
 func (s *Schema) IndexFrom() int {
@@ -65,10 +76,11 @@ func ReadFile(path string) (Schema, error) {
 	}
 
 	schema := Schema{
-		Columns:   columns,
-		HasUnique: hasUnique(columns),
-		HasFrom:   hasFrom(columns),
-		HasTo:     hasTo(columns),
+		Columns:    columns,
+		HasUnique:  hasUnique(columns),
+		HasHistory: hasHistory(columns),
+		HasFrom:    hasFrom(columns),
+		HasTo:      hasTo(columns),
 	}
 
 	return schema, nil
@@ -95,6 +107,15 @@ func validate(columns []Column) error {
 func hasUnique(columns []Column) bool {
 	for _, c := range columns {
 		if c.Unique {
+			return true
+		}
+	}
+	return false
+}
+
+func hasHistory(columns []Column) bool {
+	for _, c := range columns {
+		if c.History {
 			return true
 		}
 	}

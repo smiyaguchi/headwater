@@ -15,8 +15,12 @@ import (
 type HistoryGenerator struct{}
 
 func (hg *HistoryGenerator) Generate(schema schema.Schema, config config.Config) error {
-	if !schema.HasFrom || !schema.HasTo {
-		return errors.New("From and To field is required")
+	if !schema.HasHistory && !schema.HasFrom && !schema.HasTo {
+		return errors.New("history or from and to field is required")
+	}
+
+	if !schema.HasHistory && (!schema.HasFrom || !schema.HasTo) {
+		return errors.New("If history field is nothing from and to field is requried")
 	}
 
 	data := make([][]string, config.Count)
@@ -29,7 +33,12 @@ func (hg *HistoryGenerator) Generate(schema schema.Schema, config config.Config)
 
 		d := faker.Fake(schema, config.Loss)
 
-		historyData := hg.generateHistory(schema, config.Count-i, d.RowValue)
+		historyData := make([][]string, 0)
+		if schema.HasHistory {
+			historyData = hg.generateHistory(schema, config.Count-i, d.RowValue)
+		} else {
+			historyData = hg.generateHistoryFromTo(schema, config.Count-i, d.RowValue)
+		}
 
 		for j := 0; j < len(historyData); j++ {
 			data[i] = historyData[j]
@@ -47,6 +56,38 @@ func (hg *HistoryGenerator) Generate(schema schema.Schema, config config.Config)
 }
 
 func (hg *HistoryGenerator) generateHistory(schema schema.Schema, countRange int, row []string) [][]string {
+	h := newDateInfo(schema, schema.IndexHistory(), row)
+	historyCount := hg.generateHistoryCount(countRange)
+	data := make([][]string, historyCount)
+
+	var diffDays int = int(time.Now().Sub(h.Time).Seconds()) / 60 / 60 / 24
+
+	if historyCount == 1 || diffDays <= 1 {
+		data[0] = row
+		return data
+	}
+
+	if diffDays <= 5 {
+		historyCount = 2
+	}
+
+	var span int = diffDays / historyCount
+
+	for i := 0; i < historyCount; i++ {
+		cr := hg.copyRow(row)
+		if i == 0 {
+			data[0] = cr
+			continue
+		}
+		h.Time = h.addTimeSpan(span)
+		cr[h.Index] = h.Time.Format(h.Format)
+		data[i] = cr
+	}
+
+	return data
+}
+
+func (hg *HistoryGenerator) generateHistoryFromTo(schema schema.Schema, countRange int, row []string) [][]string {
 	from := newDateInfo(schema, schema.IndexFrom(), row)
 	to := newDateInfo(schema, schema.IndexTo(), row)
 
