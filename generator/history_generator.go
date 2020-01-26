@@ -50,10 +50,10 @@ func (hg *HistoryGenerator) generateHistory(schema schema.Schema, countRange int
 	from := newDateInfo(schema, schema.IndexFrom(), row)
 	to := newDateInfo(schema, schema.IndexTo(), row)
 
-	var diffDays = int(time.Now().Sub(from.Time).Seconds()) / 60 / 60 / 24
-
 	historyCount := hg.generateHistoryCount(countRange)
 	data := make([][]string, historyCount)
+
+	var diffDays = int(time.Now().Sub(from.Time).Seconds()) / 60 / 60 / 24
 
 	if historyCount == 1 || diffDays <= 1 {
 		cr := hg.copyRow(row)
