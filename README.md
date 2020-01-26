@@ -27,7 +27,27 @@ $ hw gen -s schema_test.json
 ```
 
 ### Generate history test data
-If generate history data, please add `from` and `to` field to schema file.
+If generate history data, please add `history` field. Or `from` and `to`field.
+When `history` field added, create history data for one column.
+
+```
+[
+  {
+    "name": "from_date",
+    "description": "from date column",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "history": "true"
+  }
+]
+```
+
+```
+# generate history test data for one column
+$ hw gen -m "HISTORY"
+```
+
+On the other hand, when `from` and `to` field are added, the history data is created in the From-To format.
 
 ```
 [
@@ -47,9 +67,7 @@ If generate history data, please add `from` and `to` field to schema file.
   }
 ]
 ```
-Generate test data, use `-m` option.
-
 ```
-# generate history test data
+# generate history test data from-to format
 $ hw gen -m "HISTORY"
 ```
