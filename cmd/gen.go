@@ -45,7 +45,7 @@ func init() {
 	genCmd.PersistentFlags().BoolVarP(&loss, "loss", "l", false, "include null values in data")
 	genCmd.PersistentFlags().StringVarP(&mode, "mode", "m", "NORMAL", "generate mode")
 	genCmd.PersistentFlags().BoolVarP(&header, "header", "", true, "header flag")
-	genCmd.PersistentFlags().StringVarP(&quote, "quote", "q", "NONE", "csv quote flag. Can use 'ALL', 'NonNumeric', 'None'. Default 'None'")
+	genCmd.PersistentFlags().StringVarP(&quote, "quote", "q", "NONE", "csv quote flag. Can use 'ALL', 'NonNumeric', 'None'.")
 
 	rootCmd.AddCommand(genCmd)
 }
