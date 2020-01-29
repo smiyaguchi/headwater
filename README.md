@@ -5,7 +5,6 @@
 
 ```
 git clone https://github.com/smiyaguchi/headwater
-go get -u github.com/brianvoe/gofakeit
 cd $GOPATH/src/github.com/smiyaguchi/headwater
 make
 ```
