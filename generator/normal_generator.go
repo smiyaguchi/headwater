@@ -33,7 +33,7 @@ func (ng *NormalGenerator) Generate(schema schema.Schema, config config.Config) 
 		keys[d.Key] = 0
 	}
 
-	if err := writer.Write(data); err != nil {
+	if err := writer.Write(data, config.Quote); err != nil {
 		return err
 	}
 

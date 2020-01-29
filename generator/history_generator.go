@@ -48,7 +48,7 @@ func (hg *HistoryGenerator) Generate(schema schema.Schema, config config.Config)
 		}
 	}
 
-	if err := writer.Write(data); err != nil {
+	if err := writer.Write(data, config.Quote); err != nil {
 		return err
 	}
 
