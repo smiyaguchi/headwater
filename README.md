@@ -14,6 +14,8 @@ make
 `headwater` uses json format schema file. Default schema filename is `schema.json`.<br>
 To change schema file, please use `-s` option.
 
+Also use `-q` option, you can quotes double quotation to field.
+
 ```
 # generate test data
 $ hw gen
@@ -23,6 +25,12 @@ $ hw gen -c 100
 
 # generate test data from specified schema file (default schema file is "schema.json")
 $ hw gen -s schema_test.json
+
+# generate test data quotes double quotation every field
+$ hw gen -q all
+
+# generate test data quotes double quotation non numeric field
+$ hw gen -q nonnumeric
 ```
 
 ### Generate history test data
