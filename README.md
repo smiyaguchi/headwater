@@ -6,7 +6,7 @@
 ```
 git clone https://github.com/smiyaguchi/headwater
 cd $GOPATH/src/github.com/smiyaguchi/headwater
-make
+make build
 ```
 
 ## Usage
