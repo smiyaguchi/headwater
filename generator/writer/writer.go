@@ -27,7 +27,9 @@ func Write(data [][]string, quote string) error {
 	}
 
 	w := csv.NewDialectWriter(os.Stdout, d)
-	w.WriteAll(data)
+    if err := w.WriteAll(data); err != nil {
+        return err
+    }
 
 	if err := w.Error(); err != nil {
 		return err

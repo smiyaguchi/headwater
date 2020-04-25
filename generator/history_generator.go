@@ -33,7 +33,7 @@ func (hg *HistoryGenerator) Generate(schema schema.Schema, config config.Config)
 
 		d := faker.Fake(schema, config.Loss)
 
-		historyData := make([][]string, 0)
+        var historyData [][]string
 		if schema.HasHistory {
 			historyData = hg.generateHistory(schema, config.Count-i, d.RowValue)
 		} else {
@@ -60,7 +60,7 @@ func (hg *HistoryGenerator) generateHistory(schema schema.Schema, countRange int
 	historyCount := hg.generateHistoryCount(countRange)
 	data := make([][]string, historyCount)
 
-	var diffDays int = int(time.Now().Sub(h.Time).Seconds()) / 60 / 60 / 24
+	var diffDays int = int(time.Since(h.Time).Seconds()) / 60 / 60 / 24
 
 	if historyCount == 1 || diffDays <= 1 {
 		data[0] = row
@@ -94,7 +94,7 @@ func (hg *HistoryGenerator) generateHistoryFromTo(schema schema.Schema, countRan
 	historyCount := hg.generateHistoryCount(countRange)
 	data := make([][]string, historyCount)
 
-	var diffDays = int(time.Now().Sub(from.Time).Seconds()) / 60 / 60 / 24
+	var diffDays = int(time.Since(from.Time).Seconds()) / 60 / 60 / 24
 
 	if historyCount == 1 || diffDays <= 1 {
 		cr := hg.copyRow(row)

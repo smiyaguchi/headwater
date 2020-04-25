@@ -1,5 +1,8 @@
 .PHONY: all
-all:
+all: lint build test clean
+
+.PHONY: build
+build:
 	go build -o hw
 
 .PHONY: clean

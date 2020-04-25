@@ -10,8 +10,6 @@ import (
 	"github.com/smiyaguchi/headwater/schema"
 )
 
-var keys = make(map[string]int)
-
 type Data struct {
 	ColumnValue map[string]string
 	RowValue    []string

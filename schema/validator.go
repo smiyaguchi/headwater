@@ -1,7 +1,6 @@
 package schema
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 )
@@ -28,7 +27,7 @@ func (v *Validator) Type(columns []Column) error {
 		t := strings.ToUpper(c.Type)
 
 		if _, exist := validTypeMap[t]; !exist {
-			return errors.New(fmt.Sprintf("Not support type %s", c.Type))
+			return fmt.Errorf("Not support type %s", c.Type)
 		}
 	}
 
@@ -45,7 +44,7 @@ func (v *Validator) Mode(columns []Column) error {
 	for _, c := range columns {
 		m := strings.ToUpper(c.Mode)
 		if _, exist := validModeMap[m]; !exist {
-			return errors.New(fmt.Sprintf("Not support mode %s", c.Mode))
+			return fmt.Errorf("Not support mode %s", c.Mode)
 		}
 	}
 
@@ -56,7 +55,7 @@ func (v *Validator) FromTo(columns []Column) error {
 	for _, c := range columns {
 		if c.From || c.To {
 			if c.Type != "DATE" && c.Type != "DATETIME" && c.Type != "TIMESTAMP" {
-				return errors.New(fmt.Sprintf("From and To field is support type DATE DATETIME TIMESTAMP"))
+				return fmt.Errorf("From and To field is support type DATE DATETIME TIMESTAMP")
 			}
 		}
 	}
