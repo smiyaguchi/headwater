@@ -6,6 +6,10 @@ all:
 clean:
 	rm hw 
 
+.PHONY: lint
+lint:
+	golangci-lint run
+
 .PHONY: test
 test:
 	./hw gen -c 10 -s test/schema_normal.json | column -s, -t
